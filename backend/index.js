@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 // Routes
 app.get('/', (req, res) => {
-    res.send('Welcome to the Signup API!');
+    res.send('Welcome to the Signup API !');
   });
 app.use('/api/auth', authRoutes);
 
