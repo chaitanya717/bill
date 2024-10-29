@@ -105,7 +105,8 @@ function UiContaxt({ children }) {
   const { isOpen, onOpen, onClose } = useDisclose();
   const themecolor = "#fff";
   const API_KEY = "ADS360KEY";
-  const HOST = "cvmhznb2u7";
+  const HOST = "https://krops-backend.vercel.app";
+  const ENTRYHOST = "https://kops-enrty.vercel.app"
 
   const [actionSheetVisible, setActionSheetVisible] = useState(false);
 
@@ -122,8 +123,6 @@ function UiContaxt({ children }) {
           setAuth,
 
           auth,
-          showModal,
-          setShowModal,
           authLoad,
           setAuthLoad,
           openResizer,
@@ -222,6 +221,7 @@ function UiContaxt({ children }) {
           setBnsFil,
           bNFil,
           setBNFil,
+          ENTRYHOST
         }}
       >
         {children}

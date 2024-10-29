@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { createContext, useContext } from "react";
 import { useDisclose } from "native-base";
-import zoom from "../assets/meeting/zoom.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 const TemplateDataContext = createContext();

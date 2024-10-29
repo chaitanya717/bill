@@ -19,6 +19,7 @@ import { DataService } from "../../DataFetcherContext/FetchedData";
 
 import Whatsapp from "../../AppComp/Whatsapp";
 import Tabs from "./Tabs";
+import LIstBuisness from "./COMP/LIstBuisness";
 
 
 

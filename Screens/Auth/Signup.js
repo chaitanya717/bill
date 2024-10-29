@@ -132,51 +132,46 @@ export default function Signup() {
       }
       setLoading(true);
       axios
-        .put(
-          `https://${String(
-            HOST
-          )}.execute-api.ap-south-1.amazonaws.com/createUser/?API_KEY=${API_KEY}`,
-
-          {
-            name: `${signupData.Name}`,
-            emailId: `${signupData.Email}`,
-            mobileNo: `${signupData.Mobile}`,
-            password: `${otp?.join("")}`,
-          }
-        )
+        .post(`${HOST}/api/auth/signup`, {
+          username: `${signupData.Name}`,
+          // emailId: `${signupData.Email}`,
+          mobileNumber: `${signupData.Mobile}`,
+          pin: `${otp?.join("")}`,
+        })
         .then((res) => {
-          setTimeout(() => {
-            toast.show({
-              position: "bottom",
-              duration: 400,
-              render: () => {
-                return (
-                  // <Box bg={`gray.100`} px="2" py="1" p={2} rounded={`3xl`} mb={2}>
-                  <Text allowFontScaling={false}
-                    style={tw`text-gray-600 rounded-lg bg-[${color}] text-white font-semibold text-xs p-2`}
-                  >
-                    🎉 {res?.data?.message} 🎉
-                  </Text>
-                  // </Box>
-                );
-              },
-            });
+        
+          if (res.status === 201) {
+            setTimeout(() => {
+              toast.show({
+                position: "bottom",
+                duration: 400,
+                render: () => {
+                  return (
+                    // <Box bg={`gray.100`} px="2" py="1" p={2} rounded={`3xl`} mb={2}>
+                    <Text
+                      allowFontScaling={false}
+                      style={tw`text-gray-600 rounded-lg bg-[${color}] text-white font-semibold text-xs p-2`}
+                    >
+                      🎉 {res?.data?.message} 🎉
+                    </Text>
+                    // </Box>
+                  );
+                },
+              });
 
-            // if (res.data) {
-            //   Navigation.navigate("Verify-Otp", {
-            //     Email: signupData.Mobile,
-            //     Type: "Signup",
-            //   });
-            //   setErrorMessages({
-            //     Name: "",
-            //     Email: "",
-            //     Mobile: "",
-            //     Pin: "",
-            //   });
-            //   setOtp(["", "", "", ""]);
-            //   setLoading(false);
-            // }
-          }, 1000);
+              if (res.status === 201) {
+                Navigation.navigate("SignIn");
+                setErrorMessages({
+                  Name: "",
+                  Email: "",
+                  Mobile: "",
+                  Pin: "",
+                });
+                setOtp(["", "", "", ""]);
+                setLoading(false);
+              }
+            }, 1000);
+          }
         })
         .catch((err) => {
           setErrorMessages({
@@ -192,7 +187,8 @@ export default function Signup() {
             render: () => {
               return (
                 // <Box bg={`gray.100`} px="2" py="1" p={2} rounded={`3xl`} mb={2}>
-                <Text allowFontScaling={false}
+                <Text
+                  allowFontScaling={false}
                   style={tw`text-gray-600 rounded-lg bg-red-300 text-white font-semibold text-xs p-2`}
                 >
                   ⚠️ {err?.response?.data?.message || err.message}
@@ -208,6 +204,7 @@ export default function Signup() {
           }, 1000);
         });
     } catch (error) {
+     
       setErrorMessages({
         Name: "",
         Email: "",
@@ -221,7 +218,8 @@ export default function Signup() {
         render: () => {
           return (
             // <Box bg={`gray.100`} px="2" py="1" p={2} rounded={`3xl`} mb={2}>
-            <Text allowFontScaling={false}
+            <Text
+              allowFontScaling={false}
               style={tw`text-gray-600 rounded-lg bg-red-300 text-white font-semibold text-xs p-2`}
             >
               ⚠️ {error?.message || "An error occurs"}
@@ -246,10 +244,16 @@ export default function Signup() {
             resizeMode="contain"
           /> */}
           <View style={tw`flex flex-col  justify-center items-center  `}>
-            <Text allowFontScaling={false} style={tw`text-gray-700 text-[13px] font-semibold `}>
+            <Text
+              allowFontScaling={false}
+              style={tw`text-gray-700 text-[13px] font-semibold `}
+            >
               Hey There,
             </Text>
-            <Text allowFontScaling={false} style={tw`text-black text-[18px] font-bold `}>
+            <Text
+              allowFontScaling={false}
+              style={tw`text-black text-[18px] font-bold `}
+            >
               Create Your Account
             </Text>
           </View>
@@ -257,7 +261,10 @@ export default function Signup() {
           <View
             style={tw` w-full  flex justify-start flex-col gap-2 items-start `}
           >
-            <Text allowFontScaling={false} style={` text-[10px] font-bold text-black `}>
+            <Text
+              allowFontScaling={false}
+              style={` text-[10px] font-bold text-black `}
+            >
               Enter Your Name
             </Text>
             <View
@@ -273,7 +280,10 @@ export default function Signup() {
               />
             </View>
             {errorMessages.Name !== "" && (
-              <Text allowFontScaling={false} style={tw`text-red-400 text-[10px]`}>
+              <Text
+                allowFontScaling={false}
+                style={tw`text-red-400 text-[10px]`}
+              >
                 {errorMessages.Name}
               </Text>
             )}
@@ -308,7 +318,10 @@ export default function Signup() {
           <View
             style={tw` w-full  flex justify-start flex-col gap-2 items-start `}
           >
-            <Text allowFontScaling={false} style={` text-[10px] font-bold text-black `}>
+            <Text
+              allowFontScaling={false}
+              style={` text-[10px] font-bold text-black `}
+            >
               Mobile Number
             </Text>
             <View
@@ -321,7 +334,9 @@ export default function Signup() {
                 ]}
               >
                 <Text allowFontScaling={false}>🇮🇳</Text>
-                <Text allowFontScaling={false} style={tw`text-[${color}]`}>+91</Text>
+                <Text allowFontScaling={false} style={tw`text-[${color}]`}>
+                  +91
+                </Text>
               </View>
               <TextInput
                 onChangeText={(e) => handleChange("Mobile", e)}
@@ -336,7 +351,10 @@ export default function Signup() {
               />
             </View>
             {errorMessages.Mobile !== "" && (
-              <Text allowFontScaling={false} style={tw`text-red-400 text-[10px]`}>
+              <Text
+                allowFontScaling={false}
+                style={tw`text-red-400 text-[10px]`}
+              >
                 {errorMessages.Mobile}
               </Text>
             )}
@@ -368,7 +386,9 @@ export default function Signup() {
           <View
             style={tw`  text-black flex justify-start w-full flex-row gap-2 items-center rounded-lg bottom-4  p-2 `}
           >
-            <Text allowFontScaling={false} style={tw`text-sm right-1`}>Set Your Pin</Text>
+            <Text allowFontScaling={false} style={tw`text-sm right-1`}>
+              Set Your Pin
+            </Text>
             <View
               style={tw`  text-black flex justify-start flex-row gap-2 items-center rounded-lg  p-2`}
             >
@@ -416,7 +436,10 @@ export default function Signup() {
               ))}
             </View>
             {errorMessages.Pin !== "" && (
-              <Text allowFontScaling={false} style={tw`text-red-400 left-1 text-[10px]`}>
+              <Text
+                allowFontScaling={false}
+                style={tw`text-red-400 left-1 text-[10px]`}
+              >
                 {errorMessages.Pin}
               </Text>
             )}
@@ -436,7 +459,10 @@ export default function Signup() {
                 style={tw`flex w-full  justify-center items-center  rounded-lg p-4 `}
                 colors={["#00bf63", "#005f33"]}
               >
-                <Text allowFontScaling={false} style={tw`text-white text-[18px] font-semibold `}>
+                <Text
+                  allowFontScaling={false}
+                  style={tw`text-white text-[18px] font-semibold `}
+                >
                   Create Account
                 </Text>
               </LinearGradient>
@@ -446,10 +472,14 @@ export default function Signup() {
             onPress={() => Navigation.navigate("SignIn")}
             style={tw`flex flex-row gap-1 justify-center items-center  `}
           >
-            <Text allowFontScaling={false} style={tw`text-gray-900 text-[14px]  `}>
+            <Text
+              allowFontScaling={false}
+              style={tw`text-gray-900 text-[14px]  `}
+            >
               You have Account
             </Text>
-            <Text allowFontScaling={false}
+            <Text
+              allowFontScaling={false}
               style={tw`text-gray-700 underline text-[${color}] text-[15px] font-semibold `}
             >
               Sign in
@@ -459,17 +489,20 @@ export default function Signup() {
             // onPress={() => Navigation.navigate("Signup")}
             style={tw`flex flex-row gap-1 w-3/4 justify-center items-center  `}
           >
-            <Text allowFontScaling={false}
+            <Text
+              allowFontScaling={false}
               style={tw`text-gray-700 text-center text-[13px] font-semibold `}
             >
               By creating an account you agree to our and{" "}
-              <Text allowFontScaling={false}
+              <Text
+                allowFontScaling={false}
                 style={tw`text-[${color}]  italic text-center text-[13px] font-bold `}
               >
                 Terms of Service
               </Text>
               {" and "}
-              <Text allowFontScaling={false}
+              <Text
+                allowFontScaling={false}
                 style={tw`text-[${color}]  italic text-center text-[13px] font-bold `}
               >
                 Privacy Policy

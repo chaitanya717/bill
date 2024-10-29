@@ -27,17 +27,34 @@ export default function TabNavigator() {
 
   const color = "#00df63";
 
+
+  
   return (
     <>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
-
-          tabBarStyle: {
-            height: 68,
-            // borderRadius: 20,
-            backgroundColor: bgcolor,
-          },
+          tabBarStyle:
+          actScreen === "BusinessSelect" ||
+          actScreen ==="BuisnessForm" ||
+          actScreen ==="ListBusiness" ||
+          actScreen ==="addentry" ||
+          actScreen ==="report" ||
+          authLoad === true
+            ? {
+                // borderRadius: 20,
+                // backgroundColor:`${color}`,
+                height: 70,
+                display: "none",
+                backgroundColor: bgcolor,
+                // padding: 7,
+                // margin: 5,
+              }
+            : {
+                height: 68,
+                // borderRadius: 20,
+                backgroundColor: bgcolor,
+              },
 
           tabBarShowLabel: true,
 
@@ -81,7 +98,7 @@ export default function TabNavigator() {
                       <>
                         <Home
                           width={25}
-                          color={color}
+                          color={`black`}
                           strokeWidth={1.5}
                           style={tw``}
                         />
@@ -122,7 +139,7 @@ export default function TabNavigator() {
                       <User
                         width={25}
                         strokeWidth={1.5}
-                        color={color}
+                        color={`black`}
                         style={tw``}
                       />
                     )}
@@ -138,7 +155,7 @@ export default function TabNavigator() {
           options={{
             tabBarLabel: "Home",
             tabBarLabelStyle: {
-              color: color,
+              color: "black",
               fontSize: 9,
               fontWeight: "600",
               bottom: 9,
@@ -175,14 +192,14 @@ export default function TabNavigator() {
             headerShown: true,
             tabBarLabel: "My Profile",
             tabBarLabelStyle: {
-              color: color,
+              color: "black",
               fontSize: 9,
               fontWeight: "600",
               bottom: 9,
             },
           }}
           name="user"
-          component={HomeStack}
+          component={ProfileStack}
         />
       </Tab.Navigator>
     </>

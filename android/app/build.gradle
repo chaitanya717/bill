@@ -81,12 +81,12 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'com.Admaker365.app'
+    namespace 'com.agrobuddy.app'
     defaultConfig {
-        applicationId 'com.Admaker365.app'
+        applicationId 'com.agrobuddy.app'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 233
+        versionCode 1
         versionName "8.0.2"
 
         buildConfigField("boolean", "REACT_NATIVE_UNSTABLE_USE_RUNTIME_SCHEDULER_ALWAYS", (findProperty("reactNative.unstable_useRuntimeSchedulerAlways") ?: true).toString())

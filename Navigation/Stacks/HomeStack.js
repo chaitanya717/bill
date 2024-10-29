@@ -28,6 +28,12 @@ import { UiDataProvider } from "../../UiContaxt/UiContaxt";
 
 import Home from "../../Screens/Home/Home";
 import { AllTempDataProvider } from "../../UiContaxt/TemplateDataContext";
+import SelectBusType from "../../Screens/Home/COMP/SelectBusType";
+import BusiForm from "../../Screens/Home/COMP/BusiForm";
+import LIstBuisness from "../../Screens/Home/COMP/LIstBuisness";
+import { DataService } from "../../DataFetcherContext/FetchedData";
+import Crentry from "../../Screens/Home/COMP/Entry/Crentry";
+import ShowReports from "../../Screens/Home/COMP/Entry/Showreports";
 
 export default function HomeStack() {
   const {
@@ -41,9 +47,11 @@ export default function HomeStack() {
     actionSheetVisible,
     bgcolor,
   } = UiDataProvider();
+  const {dataUser} = DataService()
 
   const Navigation = useNavigation();
 
+  
   const Stack = createStackNavigator();
 
   const slideFromRight = ({ current, layouts }) => {
@@ -127,15 +135,15 @@ export default function HomeStack() {
                   >
                     <Text
                       allowFontScaling={false}
-                      style={tw`text-[10px] font-semibold text-gray-600 `}
+                      style={tw`text-[14px] font-semibold text-gray-600 `}
                     >
-                      HI,
+                      Hi,
                     </Text>
                     <Text
                       allowFontScaling={false}
-                      style={[tw`text-[13px] font-bold text-[${color}]`]}
+                      style={[tw`text-[16px] font-bold text-[${color}]`]}
                     >
-                      Chaitanya
+                      {dataUser?.user?.username || ""}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -144,6 +152,46 @@ export default function HomeStack() {
           }}
           name="Home"
           component={authLoad === true ? SkeletonLoader : Home}
+        />
+          <Stack.Screen
+          options={{
+            headerShown: true,
+            headerTitle: "Select Services",
+          }}
+          name="BusinessSelect"
+          component={SelectBusType}
+        />
+          <Stack.Screen
+          options={{
+            headerShown: true,
+            headerTitle: "Create Business",
+          }}
+          name="BuisnessForm"
+          component={BusiForm}
+        />
+          <Stack.Screen
+          options={{
+            headerShown: true,
+            headerTitle: "Your Businesses",
+          }}
+          name="ListBusiness"
+          component={LIstBuisness}
+        />
+          <Stack.Screen
+          options={{
+            headerShown: true,
+            headerTitle: "Add Entry",
+          }}
+          name="addentry"
+          component={Crentry}
+        />
+          <Stack.Screen
+          options={{
+            headerShown: true,
+            headerTitle: "Reports",
+          }}
+          name="report"
+          component={ShowReports}
         />
       </Stack.Navigator>
     </>

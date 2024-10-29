@@ -26,9 +26,6 @@ import { UiDataProvider } from "../../UiContaxt/UiContaxt";
 import { DataService } from "../../DataFetcherContext/FetchedData";
 import ChangePassword from "../../Screens/Profile/Comp/ChangePassword";
 import MainProfile from "../../Screens/Profile/MainProfile";
-import Help from "../../Screens/Profile/Comp/Help";
-import Term from "../../Screens/Profile/Comp/Term";
-import Policy from "../../Screens/Profile/Comp/Policy";
 
 export default function ProfileStack() {
   const {
@@ -42,22 +39,10 @@ export default function ProfileStack() {
     actionSheetVisible,
     bgcolor,
   } = UiDataProvider();
-  const { dATAMLMUser, subscribe, fetchMlmUserData, userData } = DataService();
-  const DataOfMlmSubscribe = subscribe?.LimitedData?.map((i) => {
-    return i?.attributeToBeUpdated || i;
-  });
-  const userId = userData?.data?.mobileNo;
-  useEffect(() => {
-    fetchMlmUserData(userId);
-  }, [userId]);
-  const filteredData = DataOfMlmSubscribe?.filter((item) => {
-    return (
-      item?.Expire === false &&
-      // new Date(item?.ValideUpto) > new Date() &&
-      item?.Active === true
-    );
-  });
 
+  const {DataOfUser  } = DataService();
+
+  
   const Stack = createStackNavigator();
   const Navigation = useNavigation();
   const SelectedForm = useSelector((state) => {
@@ -79,11 +64,6 @@ export default function ProfileStack() {
     };
   };
 
-  const text = SelectedForm?.TypeForm;
-  let formattedText = text?.replace(/-/g, " ");
-  const text2 = SelectedForm?.SubType;
-  let formattedText2 = text2?.replace(/-/g, " ");
-  // const initial = dATAMLMUser[0]?.Company?.CompName ? "Home" : "Company";
   return (
     <>
       <Stack.Navigator
@@ -131,27 +111,7 @@ export default function ProfileStack() {
           }}
           component={ChangePassword}
         />
-        <Stack.Screen
-          name="Support"
-          options={{
-            headerShown: false,
-          }}
-          component={Help}
-        />
-        <Stack.Screen
-          name="Term & Condition"
-          options={{
-            headerShown: false,
-          }}
-          component={Term}
-        />
-        <Stack.Screen
-          name="policy"
-          options={{
-            headerShown: false,
-          }}
-          component={Policy}
-        />
+        
       </Stack.Navigator>
     </>
   );

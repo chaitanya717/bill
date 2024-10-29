@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Adsmaker365",
-    "slug": "adsmaker365",
-    "version": "8.0.2",
+    "name": "Agrobuddy",
+    "slug": "agrobuddy",
+    "version": "1.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/newlogo.png",
     "userInterfaceStyle": "light",
     "runtimeVersion": {
       "policy": "sdkVersion"
@@ -17,20 +17,19 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "adMaker365app"
+      "bundleIdentifier": "agrobuddy"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./assets/newlogo.png",
         "backgroundColor": "#fff"
       },
       "permissions": [
         "android.permission.RECORD_AUDIO",
         "android.permission.POST_NOTIFICATIONS"
       ],
-      "googleServicesFile": "./android/app/google-services.json",
-      "package": "com.Admaker365.app",
-      "versionCode": 233
+      "package": "com.agrobuddy.app",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -39,10 +38,10 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/logo.png",
+          "icon": "./assets/newlogo.png",
           "color": "#ffffff",
           "sounds": [],
-          "name": "Adsmaker365"
+          "name": "Agrobuddy"
         }
       ],
       [
@@ -55,8 +54,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "ab394ead-cf47-4f9f-bea7-a6942b8bbe74"
+        "projectId": "6e0de898-184b-4a98-a668-c5e78b12464c"
       }
-    }
+    },
+    "owner": "chetan717"
   }
 }

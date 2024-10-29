@@ -15,12 +15,9 @@ import { EditorContaxtGlobal } from "./UiContaxt/EditorContext";
 import Constants from "expo-constants";
 import axios from "axios";
 
-import { usePushNotifications } from "./usePushNotifications";
-
 export default function App() {
   const [isCheckingForUpdate, setIsCheckingForUpdate] = useState(false);
-  const { expoPushToken, notification } = usePushNotifications();
-  const data = JSON.stringify(notification, undefined, 2);
+ 
   // useEffect(() => {
   //   async function preventScreenCapture() {
   //     await ScreenCapture?.preventScreenCaptureAsync();

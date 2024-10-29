@@ -29,14 +29,11 @@ import { DataService } from "../../DataFetcherContext/FetchedData";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Updates from "expo-updates";
 export default function SignInScreen() {
-  const [dataUser, setDataUser] = useState([]);
   const [pass, setPass] = useState(true);
   const [rem, setRem] = useState("");
   const { isChecked, setIsChecked } = UiDataProvider();
-  const { fetchMlmUserData, setMlmTemp, setDATAMLMUser } = DataService();
+  const { dataUser, setDataUser } = DataService();
   const { width, height } = Dimensions.get("window");
-  const { setUpline, setLogo, setShowcase, setLogo1, setLogo2, setSocial } =
-    AllTempDataProvider();
 
   useEffect(() => {
     SplashDataFetch();
@@ -70,7 +67,6 @@ export default function SignInScreen() {
     try {
       const userDataString = await SecureStore.getItemAsync("userData");
       userDataSaved = JSON.parse(userDataString);
-      setDataUser(userDataSaved);
     } catch (error) {
       // console.error("Error parsing JSON:", error.message);
       // Handle the error as needed, e.g., set a default value for userDataSaved
@@ -210,25 +206,14 @@ export default function SignInScreen() {
 
       setLoading(true);
       axios
-        .put(
-          `https://${String(
-            HOST
-          )}.execute-api.ap-south-1.amazonaws.com/signinUser/?API_KEY=${API_KEY}`,
-          {
-            mobileNo: `${loginData.Mobile}`,
-            emailId: `${loginData.Email}`,
-            password: `${otp.join("")}`,
-          }
-        )
+        .post(`${HOST}/api/auth/signin`, {
+          mobileNumber: `${loginData.Mobile}`,
+          pin: `${otp.join("")}`,
+        })
         .then((res) => {
-          if (res.data?.data?.isVerified === true) {
-            setUpline([]),
-              setLogo(""),
-              setShowcase([]),
-              setLogo1(""),
-              setLogo2(""),
-              setSocial("");
+          if (res.data?.user) {
             const userDataString = JSON.stringify(res.data);
+
             SecureStore?.setItemAsync("userData", userDataString);
             if (isChecked === true) {
               const userDataString = JSON.stringify({
@@ -237,11 +222,8 @@ export default function SignInScreen() {
               });
               AsyncStorage?.setItem("remember", userDataString);
             }
-
-            setMlmTemp([]);
-            setDATAMLMUser([]);
-            fetchMlmUserData(loginData?.Mobile);
             setTimeout(() => {
+              getUserData();
               setAuth(true);
               setLoading(false);
             }, 2000);
@@ -255,36 +237,36 @@ export default function SignInScreen() {
                     allowFontScaling={false}
                     style={tw`text-gray-500 rounded-lg bg-[${color}] text-white font-semibold text-xs p-2`}
                   >
-                    🎉 {res?.data?.message}! 🎉
+                    🎉 Login Successfully ! 🎉
                   </Text>
                   // </Box>
                 );
               },
             });
           }
-          if (!res.data?.data?.isVerified) {
-            setLoading(false);
-            toast.show({
-              position: "bottom",
-              duration: 400,
-              render: () => {
-                return (
-                  // <Box bg={`gray.100`} px="2" py="1" p={2} rounded={`3xl`} mb={2}>
-                  <Text
-                    allowFontScaling={false}
-                    style={tw`text-gray-500 rounded-lg bg-red-400 text-white font-semibold text-xs p-2`}
-                  >
-                    {res?.data?.message}!
-                  </Text>
-                  // </Box>
-                );
-              },
-            });
-            Navigation.navigate("Verify-Otp", {
-              Email: res?.data?.data?.mobileNo,
-              Type: "Signup",
-            });
-          }
+          // if (!res.data?.data?.isVerified) {
+          //   setLoading(false);
+          //   toast.show({
+          //     position: "bottom",
+          //     duration: 400,
+          //     render: () => {
+          //       return (
+          //         // <Box bg={`gray.100`} px="2" py="1" p={2} rounded={`3xl`} mb={2}>
+          //         <Text
+          //           allowFontScaling={false}
+          //           style={tw`text-gray-500 rounded-lg bg-red-400 text-white font-semibold text-xs p-2`}
+          //         >
+          //           {res?.data?.message}!
+          //         </Text>
+          //         // </Box>
+          //       );
+          //     },
+          //   });
+          //   Navigation.navigate("Verify-Otp", {
+          //     Email: res?.data?.data?.mobileNo,
+          //     Type: "Signup",
+          //   });
+          // }
         })
 
         .catch((err) => {
@@ -346,29 +328,35 @@ export default function SignInScreen() {
     <>
       <TouchableWithoutFeedback onPress={dismissKeyboard}>
         {/* {dataspla?.messge ? ( */}
-          <View
-            style={tw`flex w-[${Number(
-              width
-            )}px] mt-20 flex-col  gap-4 justify-center items-center p-4 `}
-          >
-            <Image
-              style={tw`w-[200px] rounded-xl h-[100px]`}
-              resizeMode="contain"
-              source={logo}
-            />
+        <View
+          style={tw`flex w-[${Number(
+            width
+          )}px] mt-20 flex-col  gap-4 justify-center items-center p-4 `}
+        >
+          <Image
+            style={tw`w-[200px] rounded-xl h-[100px]`}
+            resizeMode="contain"
+            source={logo}
+          />
 
-            <View
-              style={tw`flex  flex-col gap-6 w-full justify-center items-center`}
-            >
-             <View style={tw`flex flex-col  justify-center items-center  `}>
-            <Text allowFontScaling={false} style={tw`text-gray-700 text-[13px] font-semibold `}>
-              Hey There,
-            </Text>
-            <Text allowFontScaling={false} style={tw`text-black text-[18px] font-bold `}>
-              Log In Your Account
-            </Text>
-          </View>
-              {/* <View
+          <View
+            style={tw`flex  flex-col gap-6 w-full justify-center items-center`}
+          >
+            <View style={tw`flex flex-col  justify-center items-center  `}>
+              <Text
+                allowFontScaling={false}
+                style={tw`text-gray-700 text-[13px] font-semibold `}
+              >
+                Hey There,
+              </Text>
+              <Text
+                allowFontScaling={false}
+                style={tw`text-black text-[18px] font-bold `}
+              >
+                Log In Your Account
+              </Text>
+            </View>
+            {/* <View
             style={tw`flex flex-row  p-1 w-1/2 justify-start   items-start gap-3`}
           >
             <TouchableOpacity
@@ -419,91 +407,91 @@ export default function SignInScreen() {
             </TouchableOpacity>
           </View> */}
 
-              {swich === true ? (
-                <>
+            {swich === true ? (
+              <>
+                <View
+                  style={tw` w-full  flex justify-start flex-col gap-0 items-start `}
+                >
                   <View
-                    style={tw` w-full  flex justify-start flex-col gap-0 items-start `}
+                    style={tw` w-full text-black flex justify-start flex-row gap-3 items-center rounded-lg bg-gray-200 p-2 h-[60px]`}
                   >
                     <View
-                      style={tw` w-full text-black flex justify-start flex-row gap-3 items-center rounded-lg bg-gray-200 p-2 h-[60px]`}
+                      style={[
+                        { width: "15%" },
+                        tw`text-black flex justify-start flex-row gap-2 items-center rounded-lg bg-gray-200 p-2 h-[60px]`,
+                      ]}
                     >
-                      <View
-                        style={[
-                          { width: "15%" },
-                          tw`text-black flex justify-start flex-row gap-2 items-center rounded-lg bg-gray-200 p-2 h-[60px]`,
-                        ]}
-                      >
-                        <Text allowFontScaling={false}>🇮🇳</Text>
-                        <Text
-                          allowFontScaling={false}
-                          style={tw`  text-[${color}] `}
-                        >
-                          +91
-                        </Text>
-                      </View>
-
-                      <TextInput
-                        maxLength={10}
-                        keyboardType={`number-pad`}
-                        autoComplete={"off"}
-                        id="Mobile"
-                        value={loginData?.Mobile}
-                        placeholder="Enter Mobile No."
-                        onChangeText={(e) => handleChange("Mobile", e)}
-                        style={[
-                          { width: "84%" },
-                          tw` bg-gray-200 text-[${color}] rounded-lg p-2 h-[60px]`,
-                        ]}
-                      />
-                    </View>
-                    {errorMessages.Mobile !== "" && (
+                      <Text allowFontScaling={false}>🇮🇳</Text>
                       <Text
                         allowFontScaling={false}
-                        style={tw`text-red-400 left-1 text-[10px]`}
+                        style={tw`  text-[${color}] `}
                       >
-                        {errorMessages.Mobile}
+                        +91
                       </Text>
-                    )}
+                    </View>
+
+                    <TextInput
+                      maxLength={10}
+                      keyboardType={`number-pad`}
+                      autoComplete={"off"}
+                      id="Mobile"
+                      value={loginData?.Mobile}
+                      placeholder="Enter Mobile No."
+                      onChangeText={(e) => handleChange("Mobile", e)}
+                      style={[
+                        { width: "84%" },
+                        tw` bg-gray-200 text-[${color}] rounded-lg p-2 h-[60px]`,
+                      ]}
+                    />
                   </View>
-                </>
-              ) : (
-                <>
+                  {errorMessages.Mobile !== "" && (
+                    <Text
+                      allowFontScaling={false}
+                      style={tw`text-red-400 left-1 text-[10px]`}
+                    >
+                      {errorMessages.Mobile}
+                    </Text>
+                  )}
+                </View>
+              </>
+            ) : (
+              <>
+                <View
+                  style={tw` w-full  flex justify-start flex-col gap-1 items-start `}
+                >
                   <View
-                    style={tw` w-full  flex justify-start flex-col gap-1 items-start `}
+                    style={tw` w-full text-black flex justify-start flex-row gap-3 items-center rounded-lg bg-gray-200 p-2 h-[60px]`}
                   >
                     <View
-                      style={tw` w-full text-black flex justify-start flex-row gap-3 items-center rounded-lg bg-gray-200 p-2 h-[60px]`}
+                      style={tw` w-[25px] text-black flex justify-start flex-row gap-2 items-center rounded-lg bg-gray-200 p-2 h-[60px]`}
                     >
-                      <View
-                        style={tw` w-[25px] text-black flex justify-start flex-row gap-2 items-center rounded-lg bg-gray-200 p-2 h-[60px]`}
-                      >
-                        <Icon as={<Mail size={20} />} />
-                      </View>
-
-                      <TextInput
-                        maxLength={50}
-                        keyboardType={`default`}
-                        autoComplete={"off"}
-                        placeholder="Email Id"
-                        onChangeText={(e) => handleChange("Email", e)}
-                        style={tw` bg-gray-200 w-3/4 rounded-lg p-2 h-[60px]`}
-                      />
+                      <Icon as={<Mail size={20} />} />
                     </View>
-                    {errorMessages.Email !== "" && (
-                      <Text
-                        allowFontScaling={false}
-                        style={tw`text-red-400 text-[10px]`}
-                      >
-                        {errorMessages.Email}
-                      </Text>
-                    )}
+
+                    <TextInput
+                      maxLength={50}
+                      keyboardType={`default`}
+                      autoComplete={"off"}
+                      placeholder="Email Id"
+                      onChangeText={(e) => handleChange("Email", e)}
+                      style={tw` bg-gray-200 w-3/4 rounded-lg p-2 h-[60px]`}
+                    />
                   </View>
-                </>
-              )}
-              <View
-                style={tw` w-[${width}px]  bottom-2 p-2  flex justify-center flex-col gap-1 items-center `}
-              >
-                {/* <View
+                  {errorMessages.Email !== "" && (
+                    <Text
+                      allowFontScaling={false}
+                      style={tw`text-red-400 text-[10px]`}
+                    >
+                      {errorMessages.Email}
+                    </Text>
+                  )}
+                </View>
+              </>
+            )}
+            <View
+              style={tw` w-[${width}px]  bottom-2 p-2  flex justify-center flex-col gap-1 items-center `}
+            >
+              {/* <View
                 style={tw` w-full text-black flex  justify-start flex-row gap-8 items-center rounded-lg bg-gray-200 p-2 h-[60px]`}
               >
                 <View
@@ -537,171 +525,168 @@ export default function SignInScreen() {
                 </View>
               </View> */}
 
+              <View
+                style={tw` w-full text-black flex justify-start flex-row gap-2 items-center rounded-lg bottom-4  p-2 h-[60px]`}
+              >
+                <Text allowFontScaling={false} style={tw`text-sm left-1`}>
+                  Enter Your Pin
+                </Text>
                 <View
-                  style={tw` w-full text-black flex justify-start flex-row gap-2 items-center rounded-lg bottom-4  p-2 h-[60px]`}
+                  style={tw`  text-black flex justify-start flex-row gap-2 items-center rounded-lg  p-2 h-[60px]`}
                 >
-                  <Text allowFontScaling={false} style={tw`text-sm left-1`}>
-                    Enter Your Pin
-                  </Text>
-                  <View
-                    style={tw`  text-black flex justify-start flex-row gap-2 items-center rounded-lg  p-2 h-[60px]`}
-                  >
-                    {pass === false ? (
-                      <TouchableOpacity onPressIn={() => setPass(true)}>
-                        <Icon as={<Eye size={20} />} />
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity onPressIn={() => setPass(false)}>
-                        <Icon as={<EyeOff size={20} />} />
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                </View>
-                <View
-                  style={tw`w-full text-black bottom-4 flex justify-center flex-row gap-[${Number(
-                    width / 55
-                  )}] items-center rounded-lg h-[60px]`}
-                >
-                  {otp?.map((digit, index) => (
-                    <TextInput
-                      key={String(index + 1)}
-                      clearButtonMode={`always`}
-                      autoComplete="off"
-                      secureTextEntry={pass}
-                      value={digit}
-                      onChangeText={(value) => handleOtpChange(index, value)}
-                      keyboardType={`number-pad`}
-                      maxLength={1}
-                      ref={inputRefs[index]}
-                      onKeyPress={({ nativeEvent }) => {
-                        if (
-                          nativeEvent.key === "Backspace" &&
-                          index > 0 &&
-                          !digit
-                        ) {
-                          inputRefs[index - 1]?.current?.focus();
-                          handleOtpChange(index - 1, "");
-                        }
-                      }}
-                      style={tw`bg-gray-200 w-[60px] rounded-xl text-[${color}] text-xl text-center border border-gray-300 p-2 h-[60px]`}
-                    />
-                  ))}
-                </View>
-                {errorMessages.Pin !== "" && (
-                  <Text
-                    allowFontScaling={false}
-                    style={tw`text-red-400 left-1 text-[10px]`}
-                  >
-                    {errorMessages.Pin}
-                  </Text>
-                )}
-                <View
-                  style={[
-                    { width: "95%" },
-                    tw`flex flex-row   justify-between items-center  `,
-                  ]}
-                >
-                  <TouchableOpacity
-                    onPress={handleCheckboxToggle}
-                    style={styles.checkboxContainer}
-                  >
-                    <View
-                      style={[
-                        styles.checkbox,
-                        isChecked ? styles.checked : null,
-                      ]}
-                    />
-                    <Text allowFontScaling={false} style={styles.label}>
-                      Remember Me
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => Navigation.navigate("ForgetPassword")}
-                    style={tw`flex flex-row gap-1 left-2 justify-center items-center  `}
-                  >
-                    <Text
-                      allowFontScaling={false}
-                      style={tw`text-gray-700 underline text-[${color}] text-center top-0 text-[14px] font-semibold `}
-                    >
-                      Forget PIN?
-                    </Text>
-                  </TouchableOpacity>
+                  {pass === false ? (
+                    <TouchableOpacity onPressIn={() => setPass(true)}>
+                      <Icon as={<Eye size={20} />} />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity onPressIn={() => setPass(false)}>
+                      <Icon as={<EyeOff size={20} />} />
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
-
-              {loading === true ? (
-                <TouchableOpacity
-                  style={tw`flex bg-[${color}] w-full flex-row gap-3 justify-center items-center  rounded-lg p-4 `}
+              <View
+                style={tw`w-full text-black bottom-4 flex justify-center flex-row gap-[${Number(
+                  width / 55
+                )}] items-center rounded-lg h-[60px]`}
+              >
+                {otp?.map((digit, index) => (
+                  <TextInput
+                    key={String(index + 1)}
+                    clearButtonMode={`always`}
+                    autoComplete="off"
+                    secureTextEntry={pass}
+                    value={digit}
+                    onChangeText={(value) => handleOtpChange(index, value)}
+                    keyboardType={`number-pad`}
+                    maxLength={1}
+                    ref={inputRefs[index]}
+                    onKeyPress={({ nativeEvent }) => {
+                      if (
+                        nativeEvent.key === "Backspace" &&
+                        index > 0 &&
+                        !digit
+                      ) {
+                        inputRefs[index - 1]?.current?.focus();
+                        handleOtpChange(index - 1, "");
+                      }
+                    }}
+                    style={tw`bg-gray-200 w-[60px] rounded-xl text-[${color}] text-xl text-center border border-gray-300 p-2 h-[60px]`}
+                  />
+                ))}
+              </View>
+              {errorMessages.Pin !== "" && (
+                <Text
+                  allowFontScaling={false}
+                  style={tw`text-red-400 left-1 text-[10px]`}
                 >
-                  <Spinner color={`#fff`} size="lg" />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  onPressIn={() => HandleSigin(loginData, HOST, otp)}
-                  style={tw`flex  justify-center bottom-4 items-center w-full rounded-xl `}
-                >
-                  <LinearGradient
-                    // Button Linear Gradient
-                    colors={["#00bf63", "#005f33"]}
-                    // style={styles.button}
-                    style={tw`flex justify-center items-center w-full rounded-lg p-4 `}
-                  >
-                    <Text
-                      allowFontScaling={false}
-                      style={tw`text-white text-[18px] font-semibold `}
-                    >
-                      Login Now
-                    </Text>
-                  </LinearGradient>
-                </TouchableOpacity>
+                  {errorMessages.Pin}
+                </Text>
               )}
+              <View
+                style={[
+                  { width: "95%" },
+                  tw`flex flex-row   justify-between items-center  `,
+                ]}
+              >
+                <TouchableOpacity
+                  onPress={handleCheckboxToggle}
+                  style={styles.checkboxContainer}
+                >
+                  <View
+                    style={[styles.checkbox, isChecked ? styles.checked : null]}
+                  />
+                  <Text allowFontScaling={false} style={styles.label}>
+                    Remember Me
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => Navigation.navigate("ForgetPassword")}
+                  style={tw`flex flex-row gap-1 left-2 justify-center items-center  `}
+                >
+                  <Text
+                    allowFontScaling={false}
+                    style={tw`text-gray-700 underline text-[${color}] text-center top-0 text-[14px] font-semibold `}
+                  >
+                    Forget PIN?
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
 
-            <TouchableOpacity
-              onPress={() => Navigation.navigate("Signup")}
-              style={tw`flex flex-row gap-1 justify-center items-center  `}
-            >
-              <Text
-                allowFontScaling={false}
-                style={tw`text-gray-900 text-[14px] `}
+            {loading === true ? (
+              <TouchableOpacity
+                style={tw`flex bg-[${color}] w-full flex-row gap-3 justify-center items-center  rounded-lg p-4 `}
               >
-                Don't have an Account
-              </Text>
-              <Text
-                allowFontScaling={false}
-                style={tw`text-gray-700 underline text-[${color}] text-[15px] font-semibold `}
+                <Spinner color={`#fff`} size="lg" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPressIn={() => HandleSigin(loginData, HOST, otp)}
+                style={tw`flex  justify-center bottom-4 items-center w-full rounded-xl `}
               >
-                Register
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={tw`flex flex-row gap-1 w-3/4 justify-center items-center  `}
-            >
-              <Text
-                allowFontScaling={false}
-                style={tw`text-gray-700 text-center text-[13px] font-semibold `}
-              >
-                By creating an account you agree to our and{" "}
-                <Text
-                  onPress={() => Navigation?.navigate("terms")}
-                  allowFontScaling={false}
-                  style={tw`text-[${color}]  italic text-center text-[13px] font-bold `}
+                <LinearGradient
+                  // Button Linear Gradient
+                  colors={["#00bf63", "#005f33"]}
+                  // style={styles.button}
+                  style={tw`flex justify-center items-center w-full rounded-lg p-4 `}
                 >
-                  Terms of Service
-                </Text>
-                {" and "}
-                <Text
-                  onPress={() => Navigation?.navigate("policys")}
-                  allowFontScaling={false}
-                  style={tw`text-[${color}]  italic text-center text-[13px] font-bold `}
-                >
-                  Privacy Policy
-                </Text>
-                .
-              </Text>
-            </TouchableOpacity>
+                  <Text
+                    allowFontScaling={false}
+                    style={tw`text-white text-[18px] font-semibold `}
+                  >
+                    Login Now
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            )}
           </View>
+
+          <TouchableOpacity
+            onPress={() => Navigation.navigate("Signup")}
+            style={tw`flex flex-row gap-1 justify-center items-center  `}
+          >
+            <Text
+              allowFontScaling={false}
+              style={tw`text-gray-900 text-[14px] `}
+            >
+              Don't have an Account
+            </Text>
+            <Text
+              allowFontScaling={false}
+              style={tw`text-gray-700 underline text-[${color}] text-[15px] font-semibold `}
+            >
+              Register
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={tw`flex flex-row gap-1 w-3/4 justify-center items-center  `}
+          >
+            <Text
+              allowFontScaling={false}
+              style={tw`text-gray-700 text-center text-[13px] font-semibold `}
+            >
+              By creating an account you agree to our and{" "}
+              <Text
+                onPress={() => Navigation?.navigate("terms")}
+                allowFontScaling={false}
+                style={tw`text-[${color}]  italic text-center text-[13px] font-bold `}
+              >
+                Terms of Service
+              </Text>
+              {" and "}
+              <Text
+                onPress={() => Navigation?.navigate("policys")}
+                allowFontScaling={false}
+                style={tw`text-[${color}]  italic text-center text-[13px] font-bold `}
+              >
+                Privacy Policy
+              </Text>
+              .
+            </Text>
+          </TouchableOpacity>
+        </View>
         {/* ) : (
         <Text>space</Text>
         )} */}

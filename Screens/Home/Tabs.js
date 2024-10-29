@@ -1,43 +1,43 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import React from "react";
 import tw from "twrnc";
-import { Home, Settings, User, Info, Heart, Search ,PlusCircle,Users,Grip,FolderDown,Receipt,UserSquareIcon} from "lucide-react-native"; // Import Lucide icons
+import {
+  PlusCircle,
+  FolderDown,
+  UserSquareIcon,
+  Table2,
+  FileEdit,
+  Briefcase,
+} from "lucide-react-native"; // Import Lucide icons
+import { useNavigation } from "@react-navigation/native";
+import LIstBuisness from "./COMP/LIstBuisness";
 
 const Tabs = () => {
+  const Navigation = useNavigation();
+
   return (
-    <View style={tw`flex-1 flex-col gap-3 justify-start items-center p-4`}>
+    // <ScrollView>
+    <View style={tw`flex-1 flex-col  gap-1 justify-start items-center p-1`}>
       {/* First Row */}
       <View style={tw`flex-row h-[110px] justify-between w-full`}>
-        <TouchableOpacity style={tw`flex-1 m-2 p-4 bg-[#F5F5F5]  shadow-2xl rounded-xl items-center`}>
+        <TouchableOpacity
+          onPressIn={() => Navigation.navigate("BusinessSelect")}
+          style={tw`flex-1 m-2 p-4 bg-[#F5F5F5]  shadow-2xl rounded-xl items-center`}
+        >
           <PlusCircle color="#00df63" size={32} style={tw`mb-2`} />
-          <Text style={tw`text-black text-center`}>Add</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={tw`flex-1 m-2 p-4 bg-[#F5F5F5]  shadow-2xl rounded-xl items-center`}>
-          <Grip color="#00df63" size={32} style={tw`mb-2`} />
-          <Text style={tw`text-black text-center`}>Services</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={tw`flex-1 m-2 p-4 bg-[#F5F5F5]  shadow-2xl rounded-xl items-center`}>
-          <Users color="#00df63" size={32} style={tw`mb-2`} />
-          <Text style={tw`text-black text-center`}>Customers</Text>
+          <Text style={tw`text-black text-center`}>Add Businesses</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Second Row */}
-      <View style={tw`flex-row h-[110px] justify-between w-full`}>
-        <TouchableOpacity style={tw`flex-1 m-2 p-4 bg-[#F5F5F5]  shadow-2xl rounded-xl items-center`}>
-          <Receipt color="#00df63" size={32} style={tw`mb-2`} />
-          <Text style={tw`text-black text-center`}>Invoices</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={tw`flex-1 m-2 p-4 bg-[#F5F5F5]  shadow-2xl rounded-xl items-center`}>
-          <FolderDown color="#00df63" size={32} style={tw`mb-2`} />
-          <Text style={tw`text-black text-center`}>Export CSV</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={tw`flex-1 m-2 p-4 bg-[#F5F5F5]  shadow-2xl rounded-xl items-center`}>
-          <UserSquareIcon color="#00df63" size={32} style={tw`mb-2`} />
-          <Text style={tw`text-black text-center`}>HR</Text>
-        </TouchableOpacity>
-      </View>
+      <Text style={tw`text-black  h-[20px]`}>My Businesses</Text>
+      <LIstBuisness />
     </View>
+    // </ScrollView>
   );
 };
 
