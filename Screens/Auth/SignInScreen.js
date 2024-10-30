@@ -32,7 +32,7 @@ export default function SignInScreen() {
   const [pass, setPass] = useState(true);
   const [rem, setRem] = useState("");
   const { isChecked, setIsChecked } = UiDataProvider();
-  const { dataUser, setDataUser } = DataService();
+  const { dataUser, setDataUser, setHit, hit } = DataService();
   const { width, height } = Dimensions.get("window");
 
   useEffect(() => {
@@ -67,6 +67,9 @@ export default function SignInScreen() {
     try {
       const userDataString = await SecureStore.getItemAsync("userData");
       userDataSaved = JSON.parse(userDataString);
+      setTimeout(() => {
+        setHit(hit + 1);
+      }, 1000);
     } catch (error) {
       // console.error("Error parsing JSON:", error.message);
       // Handle the error as needed, e.g., set a default value for userDataSaved

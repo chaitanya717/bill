@@ -166,7 +166,7 @@ const BusiForm = ({ route, navigation }) => {
                 maxLength={10}
                 placeholder="HR Mobile"
                 value={hr.mobile}
-                onChangeText={(value) => handleHrChange(index, "Mobile", value)}
+                onChangeText={(value) => handleHrChange(index, "mobile", value)}
               />
               {errors[`hrMobile${index}`] && (
                 <Text style={styles.errorText}>
