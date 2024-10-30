@@ -20,6 +20,7 @@
       "bundleIdentifier": "agrobuddy"
     },
     "android": {
+      "enableDangerousExperimentalLeanBuilds": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/newlogo.png",
         "backgroundColor": "#fff"
