@@ -23,6 +23,8 @@ const BusiForm = ({ route, navigation }) => {
   const { selectedService } = route.params;
   const { width } = Dimensions.get("window");
   const [businessName, setBusinessName] = useState("");
+  const [hrrate, setHrrate] = useState(0);
+  const [driverPay, setDriverPay] = useState(0);
   const [businessOption, setBusinessOption] = useState([]);
   const { dataUser, hit, setHit } = DataService();
   const [hrFields, setHrFields] = useState([
@@ -34,20 +36,45 @@ const BusiForm = ({ route, navigation }) => {
   const availableOptions = selectedService?.options || [];
   const selServ = selectedService?.Service;
 
+  const isjcb = availableOptions[0] === "JCB/Excavators";
+
   const validate = () => {
     const newErrors = {};
-    if (!businessName) newErrors.businessName = "Business name is required.";
 
+    // Validate business name
+    if (!businessName) {
+      newErrors.businessName = "Business name is required.";
+    }
+    if (!hrrate) {
+      newErrors.hrrate = "HrRate is required.";
+    }
+    if (!driverPay && isjcb === false) {
+      newErrors.hrrate = "Driver Rate is required.";
+    }
+
+    // Validate HR fields
     hrFields.forEach((hr, index) => {
-      if (!hr.name)
+      if (!hr.name) {
         newErrors[`hrName${index}`] = `HR name is required for HR ${
           index + 1
         }.`;
-      if (!hr.mobile)
+      }
+      if (!hr.mobile) {
         newErrors[`hrMobile${index}`] = `HR mobile is required for HR ${
           index + 1
         }.`;
+      } else if (!/^\d{10}$/.test(hr.mobile)) {
+        newErrors[
+          `hrMobile${index}`
+        ] = `HR mobile must be a 10-digit number for HR ${index + 1}.`;
+      }
+      // if (!hr.rate) {
+      //   newErrors[`hrRate${index}`] = `HR Rate is required for HR ${
+      //     index + 1
+      //   }.`;
+      // }
     });
+
     return newErrors;
   };
 
@@ -59,6 +86,7 @@ const BusiForm = ({ route, navigation }) => {
       ...errors,
       [`hrName${index}`]: null,
       [`hrMobile${index}`]: null,
+      // [`hrRate${index}`]: null,
     });
   };
 
@@ -90,6 +118,8 @@ const BusiForm = ({ route, navigation }) => {
         "https://kops-enrty.vercel.app/api/businesses",
         {
           businessName,
+          HrRate: hrrate,
+          DriverPay: driverPay,
           businessType: selServ || "",
           businessOption: availableOptions[0],
           HR: hrFields,
@@ -106,7 +136,7 @@ const BusiForm = ({ route, navigation }) => {
             return (
               <Text
                 allowFontScaling={false}
-                style={tw`text-gray-500 rounded-lg bg-[#00df63] text-white font-semibold text-xs p-2`}
+                style={tw`text-gray-500 rounded-lg bg-[#3897F9] text-white font-semibold text-xs p-2`}
               >
                 🎉 Business created successfully! ! 🎉
               </Text>
@@ -143,6 +173,37 @@ const BusiForm = ({ route, navigation }) => {
             <Text style={styles.errorText}>{errors.businessName}</Text>
           )}
 
+          {isjcb ? null : <Text style={styles.label}> Driver Rate</Text>}
+          {isjcb ? null : (
+            <TextInput
+              style={styles.input}
+              placeholder="Rate"
+              maxLength={10}
+              keyboardType={`number-pad`}
+              value={driverPay}
+              onChangeText={setDriverPay}
+            />
+          )}
+          {isjcb
+            ? null
+            : errors.hrrate && (
+                <Text style={styles.errorText}>{errors.hrrate}</Text>
+              )}
+          <Text style={styles.label}>
+            {" "}
+            {isjcb ? `Driver` : `Workers`} Rate / {isjcb ? `Hour` : `Bag`}
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Rate"
+            maxLength={10}
+            keyboardType={`number-pad`}
+            value={hrrate}
+            onChangeText={setHrrate}
+          />
+          {errors.hrrate && (
+            <Text style={styles.errorText}>{errors.hrrate}</Text>
+          )}
           <Text style={styles.label}>HR Details:</Text>
           {hrFields.map((hr, index) => (
             <View
@@ -173,6 +234,17 @@ const BusiForm = ({ route, navigation }) => {
                   {errors[`hrMobile${index}`]}
                 </Text>
               )}
+              {/* <TextInput
+                style={styles.input}
+                maxLength={6}
+                placeholder="HR RATE"
+                value={hr.rate}
+                keyboardType={`number-pad`}
+                onChangeText={(value) => handleHrChange(index, "rate", value)}
+              />
+              {errors[`hrRate${index}`] && (
+                <Text style={styles.errorText}>{errors[`hrRate${index}`]}</Text>
+              )} */}
               <View style={styles.switchContainer}>
                 <Text>Active</Text>
                 <Switch
@@ -225,7 +297,7 @@ const BusiForm = ({ route, navigation }) => {
             style={styles.submitButton}
           >
             <LinearGradient
-              colors={["#00bf63", "#00bf63"]}
+              colors={["#3897F9", "#3897F9"]}
               style={styles.submitGradient}
             >
               {loading ? (

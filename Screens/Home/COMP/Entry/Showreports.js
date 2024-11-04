@@ -79,6 +79,8 @@ const Showreports = ({ route }) => {
   const expOption = ["📈 Excel", "📑 CSV"];
   const paymentOptions = ["Pending", "Done"];
 
+  const DriverAmount = Number(selectedbusiness?.HrRate);
+
   const fetchEntries = async () => {
     setIsLoading(true);
     try {
@@ -202,25 +204,27 @@ Thank you ! 😊
         <View style={tw`flex flex-col gap-2 justify-between items-start`}>
           <Text>Name: {item.name}</Text>
           <Text>Total: ₹{item?.total || "0"}</Text>
-          <View style={tw`flex-row items-center`}>
-            <Text>Payment Status:{` `}</Text>
-            <View style={tw`bg-[#F3F3F3] p-1 rounded-xl`}>
-              <Text
-                style={
-                  item.paymentStatus?.status === "Pending"
-                    ? tw`text-xs font-medium text-red-500`
-                    : tw`text-xs font-medium text-green-500`
-                }
-              >
-                {" " + item.paymentStatus?.status || "Status 0" + " "}
-              </Text>
+          {item.paymentStatus?.status === "Pending" ? null : (
+            <View style={tw`flex-row items-center`}>
+              <Text>Payment Status:{` `}</Text>
+              <View style={tw`bg-[#F3F3F3] p-1 rounded-xl`}>
+                <Text
+                  style={
+                    item.paymentStatus?.status === "Pending"
+                      ? tw`text-xs font-medium text-red-500`
+                      : tw`text-xs font-medium text-green-500`
+                  }
+                >
+                  {" " + item.paymentStatus?.status || "Status 0" + " "}
+                </Text>
+              </View>
             </View>
-          </View>
+          )}
           {/* <Text>Business Option: {item.businessOption}</Text> */}
           {item.paymentStatus?.status === "Pending" ? (
             <TouchableOpacity
               onPress={() => sendInvoice(item)}
-              style={tw`bg-[#00df63] text-white p-2 rounded-xl`}
+              style={tw`bg-[#3897F9] text-white p-2 mt-2 rounded-xl`}
             >
               <Text style={tw` text-white font-medium text-xs `}>
                 Send Reminder 🔔
@@ -230,7 +234,7 @@ Thank you ! 😊
         </View>
         <View style={tw`flex flex-col gap-6 justify-between items-center`}>
           <TouchableOpacity onPress={() => handleEntryPress(item)}>
-            <Eye color="#00df63" size={20} style={tw``} />
+            <Eye color="#3897F9" size={20} style={tw``} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleEditButtonPress}>
             <Edit3 color="black" size={20} style={tw``} />
@@ -332,7 +336,7 @@ Thank you ! 😊
           return (
             <Text
               allowFontScaling={false}
-              style={tw`text-white rounded-lg bg-[#00df63] text-white font-semibold text-xs p-2`}
+              style={tw`text-white rounded-lg bg-[#3897F9] text-white font-semibold text-xs p-2`}
             >
               🎉 Entry Deleted Successfully! 🎉
             </Text>
@@ -578,7 +582,7 @@ Thank you ! 😊
           <ActivityIndicator
             style={tw`flex mt-20 justify-center items-center`}
             size="large"
-            color="#00df63"
+            color="#3897F9"
           />
         ) : (
           <FlatList
@@ -733,6 +737,11 @@ Thank you ! 😊
                       </Text>
                     )}
 
+                    {/* <Text style={tw`text-base mb-2`}>
+                      <Text style={tw`font-semibold`}>Driver Amount:</Text> ₹
+                      {DriverAmount}
+                    </Text> */}
+
                     <Text style={tw`text-base mb-3`}>
                       <Text style={tw`font-semibold`}>Fuel Amount:</Text> ₹
                       {Number(selectedEntry.diesel) || "0"}
@@ -761,9 +770,11 @@ Thank you ! 😊
                         <Text style={tw`font-semibold`}>Total Spend:</Text> ₹
                         {Number(selectedEntry?.bag) *
                           Number(selectedEntry?.hrrate) +
-                          Number(selectedEntry.diesel) || "0"}
+                          Number(selectedEntry?.diesel) +
+                          Number(Number(DriverAmount)) || "0"}
                       </Text>
                     )}
+
                     <Text style={tw`text-base mb-2`}>
                       <Text style={tw`font-semibold`}>Total Profit:</Text> ₹
                       {isJcb
@@ -771,8 +782,12 @@ Thank you ! 😊
                             Number(totalAmountString) -
                             Number(selectedEntry.diesel) || "0"
                         : selectedEntry.total -
-                          (Number(selectedEntry.bag * selectedEntry.hrrate) +
-                            Number(selectedEntry.diesel) || "0")}
+                          Number(
+                            Number(selectedEntry?.bag) *
+                              Number(selectedEntry?.hrrate) +
+                              Number(selectedEntry?.diesel) +
+                              Number(Number(DriverAmount)) || "0"
+                          )}
                     </Text>
 
                     <TouchableOpacity

@@ -21,6 +21,7 @@ import {
   Table2,
   FileEdit,
   Briefcase,
+  Users,
 } from "lucide-react-native";
 import tw from "twrnc";
 
@@ -114,7 +115,7 @@ const ListBusiness = () => {
         description: "Business deleted successfully.",
         status: "success",
         duration: 1000,
-        color: "#00df63",
+        color: "#3897F9",
       });
     } catch (error) {
       toast.show({
@@ -135,35 +136,39 @@ const ListBusiness = () => {
   const GoReport = (item) => {
     navigation?.navigate("report", { selectedbusiness: item });
   };
+  const GoHr = (item) => {
+    navigation?.navigate("Hr", { selectedbusiness: item });
+  };
   const renderBusiness = ({ item, index }) => (
     <View style={[styles.businessCard]}>
       <View style={tw`flex flex-row gap-0 mb-2 justify-center items-center`}>
-        <View style={tw`flex-row h-[100px] justify-between w-[150px]`}>
+        <View style={tw`flex-row h-[100px] justify-between w-[100px]`}>
           <TouchableOpacity
             onPress={() => GoEntry(item)}
-            style={tw`flex-1 m-2 p-4 bg-[#F5F5F5] shadow-2xl rounded-xl items-center`}
+            style={tw`flex-1 m-2 p-4 bg-[#fff]  rounded-xl items-center`}
           >
-            <FileEdit color="#00df63" size={25} style={tw`mb-2`} />
+            <FileEdit color="#3897F9" size={25} style={tw`mb-2`} />
             <Text style={tw`text-black text-xs text-center`}>Entries</Text>
           </TouchableOpacity>
         </View>
-        <View style={tw`flex-row h-[100px] justify-between w-[150px]`}>
+        <View style={tw`flex-row h-[100px] justify-between w-[100px]`}>
           <TouchableOpacity
             onPress={() => GoReport(item)}
-            style={tw`flex-1 m-2 p-4 bg-[#F5F5F5] shadow-2xl rounded-xl items-center`}
+            style={tw`flex-1 m-2 p-4 bg-[#fff]  rounded-xl items-center`}
           >
-            <Table2 color="#00df63" size={25} style={tw`mb-2`} />
+            <Table2 color="#3897F9" size={25} style={tw`mb-2`} />
             <Text style={tw`text-black text-xs text-center`}>Reports</Text>
           </TouchableOpacity>
         </View>
-        {/* <View style={tw`flex-row h-[100px] justify-between w-[100px]`}>
+        <View style={tw`flex-row h-[100px] justify-between w-[100px]`}>
           <TouchableOpacity
-            style={tw`flex-1 m-2 p-4 bg-[#F5F5F5] shadow-2xl rounded-xl items-center`}
+            onPress={() => GoHr(item)}
+            style={tw`flex-1 m-2 p-4 bg-[#fff]  rounded-xl items-center`}
           >
-            <FolderDown color="#00df63" size={25} style={tw`mb-2`} />
-            <Text style={tw`text-black text-xs text-center`}>Export</Text>
+            <Users color="#3897F9" size={25} style={tw`mb-2`} />
+            <Text style={tw`text-black text-xs text-center`}>Workers</Text>
           </TouchableOpacity>
-        </View> */}
+        </View>
       </View>
 
       <Text style={styles.businessTitle}>{item.businessName}</Text>
@@ -177,7 +182,7 @@ const ListBusiness = () => {
           onPress={() => handleEdit(item)}
           style={styles.button}
         >
-          <Ionicons name="create-outline" size={25} color="#00df63" />
+          <Ionicons name="create-outline" size={25} color="#3897F9" />
           <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>
 
@@ -209,12 +214,15 @@ const ListBusiness = () => {
       ) : ( */}
       <FlatList
         data={businesses}
+        style={{ width: "100%", padding: 10, height: "100%" }}
         renderItem={renderBusiness}
         keyExtractor={(item) => item._id}
         onEndReached={loadMore}
         onEndReachedThreshold={0.1}
         showsVerticalScrollIndicator={false}
-        ListFooterComponent={loading ? <ActivityIndicator /> : null}
+        ListFooterComponent={
+          loading ? <ActivityIndicator color={`#3897F9`} /> : null
+        }
         ListEmptyComponent={
           !loading ? (
             <Text style={styles.noDataText}>No businesses available</Text>
@@ -227,6 +235,7 @@ const ListBusiness = () => {
         onClose={() => setModalVisible(false)}
         business={selectedBusiness}
         onUpdate={handleUpdateBusiness}
+        fetchBusinesses={fetchBusinesses}
       />
     </View>
   );

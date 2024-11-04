@@ -118,7 +118,7 @@ function UiContaxt({ children }) {
     <>
       <UiProContext.Provider
         value={{
-          color: "#00bf63",
+          color: "#3897F9",
           bgcolor: "#F4F6F9",
           setAuth,
 

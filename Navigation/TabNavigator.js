@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Home, User, Gem, PlusCircle, Network } from "lucide-react-native";
+import {
+  Home,
+  User,
+  Gem,
+  PlusCircle,
+  Network,
+  ShieldCheck,
+} from "lucide-react-native";
 import { StyleSheet, View, Text, Button, TouchableOpacity } from "react-native";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
@@ -8,6 +15,8 @@ import HomeStack from "./Stacks/HomeStack";
 import { UiDataProvider } from "../UiContaxt/UiContaxt";
 import ProfileStack from "./Stacks/Profilestack";
 import { DataService } from "../DataFetcherContext/FetchedData";
+import MainPlans from "../Screens/Plans/MainPlans";
+import MainAdmin from "../Screens/Admin/MainAdmin";
 const Tab = createBottomTabNavigator();
 export default function TabNavigator() {
   const [actScreen, setActScreen] = useState();
@@ -25,36 +34,36 @@ export default function TabNavigator() {
     return unsubscribe;
   }, [navigation]);
 
-  const color = "#00df63";
+  const color = "#3897F9";
 
-
-  
   return (
     <>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarStyle:
-          actScreen === "BusinessSelect" ||
-          actScreen ==="BuisnessForm" ||
-          actScreen ==="ListBusiness" ||
-          actScreen ==="addentry" ||
-          actScreen ==="report" ||
-          authLoad === true
-            ? {
-                // borderRadius: 20,
-                // backgroundColor:`${color}`,
-                height: 70,
-                display: "none",
-                backgroundColor: bgcolor,
-                // padding: 7,
-                // margin: 5,
-              }
-            : {
-                height: 68,
-                // borderRadius: 20,
-                backgroundColor: bgcolor,
-              },
+            actScreen === "BusinessSelect" ||
+            actScreen === "BuisnessForm" ||
+            actScreen === "ListBusiness" ||
+            actScreen === "addentry" ||
+            actScreen === "report" ||
+            actScreen === "Hr" ||
+            // actScreen === "Home" ||
+            authLoad === true
+              ? {
+                  // borderRadius: 20,
+                  // backgroundColor:`${color}`,
+                  height: 70,
+                  display: "none",
+                  backgroundColor: bgcolor,
+                  // padding: 7,
+                  // margin: 5,
+                }
+              : {
+                  height: 68,
+                  // borderRadius: 20,
+                  backgroundColor: bgcolor,
+                },
 
           tabBarShowLabel: true,
 
@@ -84,7 +93,7 @@ export default function TabNavigator() {
                           <Home
                             width={25}
                             color={`#fff`}
-                            strokeWidth={3}
+                            strokeWidth={2}
                             style={tw`rounded-lg  `}
                           />
                           {/* <Text allowFontScaling={false}
@@ -125,7 +134,7 @@ export default function TabNavigator() {
                           <User
                             width={25}
                             color={"#fff"}
-                            strokeWidth={3}
+                            strokeWidth={2}
                             style={tw`rounded-lg  `}
                           />
                           {/* <Text allowFontScaling={false}
@@ -139,6 +148,84 @@ export default function TabNavigator() {
                       <User
                         width={25}
                         strokeWidth={1.5}
+                        color={`black`}
+                        style={tw``}
+                      />
+                    )}
+                  </View>
+                </>
+              );
+            } else if (route.name === "Premium") {
+              iconComponent = (
+                <>
+                  <View
+                    style={
+                      focused
+                        ? tw`flex flex-col  rounded-lg p-2  justify-center items-center`
+                        : tw`flex flex-col justify-center items-center`
+                    }
+                  >
+                    {focused ? (
+                      <>
+                        <View
+                          style={tw` flex flex-col rounded-[120px] p-2 bg-[${color}] justify-center items-center `}
+                        >
+                          <Gem
+                            width={25}
+                            color={"#fff"}
+                            strokeWidth={2}
+                            style={tw`rounded-lg  `}
+                          />
+                          {/* <Text allowFontScaling={false}
+                            style={tw`text-[#ffffff] font-semibold text-[9px]`}
+                          >
+                            {route.name}
+                          </Text> */}
+                        </View>
+                      </>
+                    ) : (
+                      <Gem
+                        width={25}
+                        strokeWidth={1.5}
+                        color={`black`}
+                        style={tw``}
+                      />
+                    )}
+                  </View>
+                </>
+              );
+            } else if (route.name === "Organization") {
+              iconComponent = (
+                <>
+                  <View
+                    style={
+                      focused
+                        ? tw`flex flex-col  rounded-lg p-2  justify-center items-center`
+                        : tw`flex flex-col justify-center items-center`
+                    }
+                  >
+                    {focused ? (
+                      <>
+                        <View
+                          style={tw` flex flex-col rounded-[120px] p-2 bg-[${color}] justify-center items-center `}
+                        >
+                          <ShieldCheck
+                            width={25}
+                            color={"#fff"}
+                            strokeWidth={2}
+                            style={tw`rounded-lg  `}
+                          />
+                          {/* <Text allowFontScaling={false}
+                            style={tw`text-[#ffffff] font-semibold text-[9px]`}
+                          >
+                            {route.name}
+                          </Text> */}
+                        </View>
+                      </>
+                    ) : (
+                      <ShieldCheck
+                        width={25}
+                        strokeWidth={1.0}
                         color={`black`}
                         style={tw``}
                       />
@@ -163,6 +250,32 @@ export default function TabNavigator() {
           }}
           name="home"
           component={HomeStack}
+        />
+        <Tab.Screen
+          options={{
+            tabBarLabel: "Premium",
+            tabBarLabelStyle: {
+              color: "black",
+              fontSize: 9,
+              fontWeight: "600",
+              bottom: 9,
+            },
+          }}
+          name="Premium"
+          component={MainPlans}
+        />
+        <Tab.Screen
+          options={{
+            tabBarLabel: "Admin",
+            tabBarLabelStyle: {
+              color: "black",
+              fontSize: 9,
+              fontWeight: "600",
+              bottom: 9,
+            },
+          }}
+          name="Organization"
+          component={MainAdmin}
         />
 
         {/* 

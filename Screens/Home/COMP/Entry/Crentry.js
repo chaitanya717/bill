@@ -16,6 +16,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import tw from "twrnc"; // Tailwind styling
 import { useToast } from "native-base";
 import { useNavigation } from "@react-navigation/native";
+import { CheckBox } from "react-native-elements";
 const Crentry = ({ route }) => {
   const toast = useToast();
   const navigation = useNavigation();
@@ -29,17 +30,17 @@ const Crentry = ({ route }) => {
     businessOption: selectedbusiness?.businessOption,
     bag: "",
     rate: "",
-    hrrate: "",
+    hrrate: selectedbusiness?.HrRate?.toString() || 0,
     hrname: [],
     diesel: "",
     total: "", // allow for manual editing if user changes it
     paymentMode: "",
     paymentStatus: "",
   });
-
   const isJcb = selectedbusiness?.businessOption[0] === "JCB/Excavators";
 
   const [startTime, setStartTime] = useState(new Date());
+  const [isDriver, setIsDriver] = useState(true);
   const [endTime, setEndTime] = useState(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
@@ -47,6 +48,9 @@ const Crentry = ({ route }) => {
   const [totalAmount, setTotalAmount] = useState(0);
   const openStartTimePicker = () => setShowStartPicker(true);
 
+  const toggleCheckbox = () => {
+    setIsDriver(!isDriver);
+  };
   useEffect(() => {
     calculateTotalHoursAndAmount(startTime, endTime);
   }, [startTime, endTime, formData?.rate]);
@@ -196,6 +200,7 @@ const Crentry = ({ route }) => {
             hrcount: formData?.hrname?.length,
             hrrate: formData?.hrrate,
             diesel: formData?.diesel,
+            Driver: isDriver,
             total: isJcb
               ? totalAmount
               : Number(formData?.bag) * Number(formData.rate),
@@ -217,7 +222,7 @@ const Crentry = ({ route }) => {
               // <Box bg={`gray.100`} px="2" py="1" p={2} rounded={`3xl`} mb={2}>
               <Text
                 allowFontScaling={false}
-                style={tw`text-gray-500 rounded-lg bg-[#00df63] text-white font-semibold text-xs p-2`}
+                style={tw`text-gray-500 rounded-lg bg-[#3897F9] text-white font-semibold text-xs p-2`}
               >
                 🎉 Entry Save Successfully ! 🎉
               </Text>
@@ -282,7 +287,7 @@ Thank you ! 😊
             [
               {
                 text: "No",
-                onPress: () => console.log("Send cancelled"),
+                onPress: () => console.log(""),
                 style: "cancel",
               },
               {
@@ -361,6 +366,17 @@ Thank you ! 😊
           value={formData.name}
           onChangeText={(text) => handleChange("name", text)}
         />
+
+        {isJcb ? null : (
+          <View style={{ padding: 5 }}>
+            <CheckBox
+              title="Include Driver"
+              checked={isDriver}
+              onPress={toggleCheckbox}
+            />
+            {/* <Text>{`Is Driver: ${isDriver ? "Yes" : "No"}`}</Text> */}
+          </View>
+        )}
         <Text style={tw`font-semibold mb-2`}>Issue Date</Text>
         <TouchableOpacity
           style={tw`border p-2 border-[#ccc] mb-4 rounded-lg`}
@@ -403,9 +419,11 @@ Thank you ! 😊
           </>
         )}
         {isJcb ? (
-          <Text style={tw`font-semibold mb-2`}>Rate / Hour</Text>
+          <Text style={tw`font-semibold mb-2`}>
+            Rate / Hour (₹{formData.rate})
+          </Text>
         ) : (
-          <Text style={tw`font-semibold mb-2`}>Rate / Bag</Text>
+          <Text style={tw`font-semibold mb-2`}>Rate / Bag (₹{formData.rate})</Text>
         )}
         <TextInput
           placeholder="Rate"
@@ -507,12 +525,17 @@ Thank you ! 😊
           ))}
         </View> */}
         {isJcb ? (
-          <Text style={tw`font-semibold mb-2`}>Driver Rate / Hour</Text>
+          <Text style={tw`font-semibold text-[#ccc] mb-2`}>
+            Driver Rate / Hour
+          </Text>
         ) : (
-          <Text style={tw`font-semibold mb-2`}>Workers Rate / Bag</Text>
+          <Text style={tw`font-semibold text-[#ccc] mb-2`}>
+            Workers Rate / Bag
+          </Text>
         )}
         <TextInput
           placeholder=""
+          editable={false}
           style={tw`border p-2 border-[#ccc] mb-4 rounded-lg`}
           keyboardType="numeric"
           value={formData.hrrate}
@@ -612,13 +635,13 @@ Thank you ! 😊
         <Text
           style={tw`font-semibold border rounded-lg border-[#ccc] p-3 text-start mb-2`}
         >
-          Total Amount : {isJcb ? totalAmount : Number(Number(formData?.total))}
+          Total Amount : ₹{isJcb ? totalAmount : Number(Number(formData?.total))}
         </Text>
         <TouchableOpacity
           onPress={() => handleSubmit(selectedbusiness, formData)}
         >
           <LinearGradient
-            colors={["#00bf63", "#005f33"]}
+            colors={["#3897F9", "#3897F8"]}
             style={tw`p-4 rounded-lg mb-1 mt-2`}
           >
             {loading ? (

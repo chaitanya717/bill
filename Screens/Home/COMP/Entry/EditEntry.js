@@ -246,7 +246,7 @@ const EdiEntryModel = ({
               // <Box bg={`gray.100`} px="2" py="1" p={2} rounded={`3xl`} mb={2}>
               <Text
                 allowFontScaling={false}
-                style={tw`text-white rounded-lg bg-[#00df63] text-white font-semibold text-xs p-2`}
+                style={tw`text-white rounded-lg bg-[#3897F9] text-white font-semibold text-xs p-2`}
               >
                 🎉 Entry Updated Successfully ! 🎉
               </Text>
@@ -614,13 +614,14 @@ Thank you ! 😊
         <Text
           style={tw`font-semibold border rounded-lg border-[#ccc] p-3 text-start mb-2`}
         >
-          Total Amount : {isJcb ? totalAmount : Number(Number(formData?.total))}
+          Total Amount : ₹{isJcb ? totalAmount : Number(Number(formData?.total))}
         </Text>
         <TouchableOpacity
           onPress={() => handleSubmit(selectedbusiness, formData, item)}
         >
+          
           <LinearGradient
-            colors={["#00bf63", "#005f33"]}
+            colors={["#3897F9", "#3897F8"]}
             style={tw`p-4 rounded-lg mb-1 mt-2`}
           >
             {loading ? (

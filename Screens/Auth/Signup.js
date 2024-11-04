@@ -457,7 +457,7 @@ export default function Signup() {
             >
               <LinearGradient
                 style={tw`flex w-full  justify-center items-center  rounded-lg p-4 `}
-                colors={["#00bf63", "#005f33"]}
+                colors={["#3897F9", "#3897F8"]}
               >
                 <Text
                   allowFontScaling={false}

@@ -4,9 +4,7 @@ import { TouchableOpacity, Text } from "react-native";
 import { Icon } from "native-base";
 import MainPlans from "../../Screens/Plans/MainPlans";
 import tw from "twrnc";
-import Checkout from "../../Screens/Plans/Checkout";
 import { useNavigation } from "@react-navigation/native";
-import RazorpayScreen from "../../Screens/Plans/Razorpay/MainRazorpay";
 import { ArrowLeft } from "lucide-react-native";
 export default function PremiumStack() {
   const Stack = createStackNavigator();
@@ -61,14 +59,14 @@ export default function PremiumStack() {
           name="Premium Plans"
           component={MainPlans}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           options={{
             headerShown: false,
           }}
           name="Checkout"
           component={Checkout}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           options={{
             headerShown: true,
             headerTitleStyle: {
@@ -82,7 +80,7 @@ export default function PremiumStack() {
           }}
           name="Razorpay"
           component={RazorpayScreen}
-        />
+        /> */}
       </Stack.Navigator>
     </>
   );

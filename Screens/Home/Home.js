@@ -7,8 +7,14 @@ import {
   Pressable,
 } from "react-native";
 
+import { DataService } from "../../DataFetcherContext/FetchedData";
 import MainHomeScreen from "./MainHomeScreen";
+
 const Home = () => {
+  const { dataUser, hit, setHit } = DataService();
+  useEffect(() => {
+    setHit(hit + 1);
+  }, []);
   return (
     <>
       <MainHomeScreen />

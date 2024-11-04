@@ -226,7 +226,7 @@ export default function SetNewPassword() {
           >
             <LinearGradient
               style={tw`flex justify-center items-center w-full rounded-lg p-4`}
-              colors={["#00bf63", "#005f33"]}
+              colors={["#3897F9", "#3897F8"]}
             >
               <Text allowFontScaling={false} style={tw`text-white text-[18px] font-semibold `}>
                 Update Pin

@@ -34,6 +34,8 @@ import LIstBuisness from "../../Screens/Home/COMP/LIstBuisness";
 import { DataService } from "../../DataFetcherContext/FetchedData";
 import Crentry from "../../Screens/Home/COMP/Entry/Crentry";
 import ShowReports from "../../Screens/Home/COMP/Entry/Showreports";
+import Mainhr from "../../Screens/Home/COMP/HR/Mainhr";
+import MainPlans from "../../Screens/Plans/MainPlans";
 
 export default function HomeStack() {
   const {
@@ -47,11 +49,10 @@ export default function HomeStack() {
     actionSheetVisible,
     bgcolor,
   } = UiDataProvider();
-  const {dataUser} = DataService()
+  const { dataUser } = DataService();
 
   const Navigation = useNavigation();
 
-  
   const Stack = createStackNavigator();
 
   const slideFromRight = ({ current, layouts }) => {
@@ -114,8 +115,7 @@ export default function HomeStack() {
                 </TouchableOpacity> */}
                 <TouchableOpacity
                   style={tw`flex flex-col p-1 bg-gray-100 rounded-full  right-0 justify-center items-center`}
-                >
-                </TouchableOpacity>
+                ></TouchableOpacity>
               </View>
             ),
             headerLeft: () => (
@@ -153,7 +153,7 @@ export default function HomeStack() {
           name="Home"
           component={authLoad === true ? SkeletonLoader : Home}
         />
-          <Stack.Screen
+        <Stack.Screen
           options={{
             headerShown: true,
             headerTitle: "Select Services",
@@ -161,7 +161,7 @@ export default function HomeStack() {
           name="BusinessSelect"
           component={SelectBusType}
         />
-          <Stack.Screen
+        <Stack.Screen
           options={{
             headerShown: true,
             headerTitle: "Create Business",
@@ -169,7 +169,7 @@ export default function HomeStack() {
           name="BuisnessForm"
           component={BusiForm}
         />
-          <Stack.Screen
+        <Stack.Screen
           options={{
             headerShown: true,
             headerTitle: "Your Businesses",
@@ -177,7 +177,7 @@ export default function HomeStack() {
           name="ListBusiness"
           component={LIstBuisness}
         />
-          <Stack.Screen
+        <Stack.Screen
           options={{
             headerShown: true,
             headerTitle: "Add Entry",
@@ -185,13 +185,29 @@ export default function HomeStack() {
           name="addentry"
           component={Crentry}
         />
-          <Stack.Screen
+        <Stack.Screen
           options={{
             headerShown: true,
             headerTitle: "Reports",
           }}
           name="report"
           component={ShowReports}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerTitle: "HR (Workers)",
+          }}
+          name="Hr"
+          component={Mainhr}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerTitle: "Plans",
+          }}
+          name="Plan"
+          component={MainPlans}
         />
       </Stack.Navigator>
     </>

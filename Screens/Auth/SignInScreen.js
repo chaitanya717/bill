@@ -631,7 +631,7 @@ export default function SignInScreen() {
               >
                 <LinearGradient
                   // Button Linear Gradient
-                  colors={["#00bf63", "#005f33"]}
+                  colors={["#3897F9", "#3897F8"]}
                   // style={styles.button}
                   style={tw`flex justify-center items-center w-full rounded-lg p-4 `}
                 >

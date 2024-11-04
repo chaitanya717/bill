@@ -203,7 +203,7 @@ const ChangePassword = () => {
         // <View style={tw`bg-[${color}] rounded-lg w-full p-3`}>
         <LinearGradient
           style={tw`rounded-xl w-full p-3`}
-          colors={["#00bf63", "#005f33"]}
+          colors={["#3897F9", "#3897F8"]}
         >
           <Pressable
           disabled={load}

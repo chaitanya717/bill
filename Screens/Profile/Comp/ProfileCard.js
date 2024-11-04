@@ -407,7 +407,7 @@ export default ProfileCard;
 //       >
 //         <LinearGradient
 //           style={tw`flex flex-row justify-center w-full items-center p-3 rounded-lg `}
-//           colors={["#00bf63", "#005f33"]}
+//           colors={["#3897F9", "#3897F8"]}
 //         >
 //           <Text
 //             allowFontScaling={false}

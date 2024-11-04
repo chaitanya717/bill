@@ -37,11 +37,11 @@ const SelectBusType = ({ navigation }) => {
       style={[
         tw`flex flex-col items-center justify-center m-2 p-4 border rounded-lg`,
         selectedType?.id === item.id
-          ? tw`border-green-500`
+          ? tw`border-[#3897F9]`
           : tw`border-gray-300`,
       ]}
     >
-      {selectedType?.id === item.id && <Check color="#00bf63" />}
+      {selectedType?.id === item.id && <Check color="#3897F9" />}
       {/* Display Service name */}
       <Text style={tw`text-center`}>{item.Service}</Text>
     </TouchableOpacity>
@@ -70,7 +70,7 @@ const SelectBusType = ({ navigation }) => {
           style={tw`flex justify-center bottom-4 items-center w-full rounded-xl`}
         >
           <LinearGradient
-            colors={["#00bf63", "#005f33"]}
+            colors={["#3897F9", "#3897F8"]}
             style={tw`flex justify-center items-center w-full rounded-lg p-4`}
           >
             <Text
